@@ -17,15 +17,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InternetCubit(),
+      create: (context) => InternetBloc(),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Bloc With Rohit',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
           onGenerateRoute: (settings) => generateRoute(settings),
-          home: const WelcomeScreen()),
+          home: const HomePage()),
     );
   }
 }
