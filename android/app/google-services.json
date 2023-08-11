@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "416113617258",
+    "project_id": "blocrohit",
+    "storage_bucket": "blocrohit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416113617258:android:0bd77176a2345ca2371d13",
+        "android_client_info": {
+          "package_name": "com.example.bloc_rohit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416113617258-49i3750jh99pdsj7c1licnfa6vobgrvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL3cdtLsrkRjzwDSEJd5S9NZl_6uW0J7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416113617258-49i3750jh99pdsj7c1licnfa6vobgrvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
