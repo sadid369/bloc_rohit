@@ -1,6 +1,9 @@
 import 'package:bloc_rohit/home_page.dart';
+import 'package:bloc_rohit/screens/mobile_signIn/cubit/auth_cubit.dart';
+import 'package:bloc_rohit/screens/mobile_signIn/cubit/auth_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NumberVerification extends StatefulWidget {
   const NumberVerification({Key? key}) : super(key: key);
@@ -29,6 +32,7 @@ class _NumberVerificationState extends State<NumberVerification> {
               ),
               TextField(
                 controller: verificationController,
+                maxLength: 6,
                 onChanged: (value) {},
                 decoration: const InputDecoration(hintText: '6-Digit OTP'),
               ),
@@ -38,16 +42,39 @@ class _NumberVerificationState extends State<NumberVerification> {
               const SizedBox(
                 height: 20,
               ),
-              CupertinoButton(
-                color: Colors.blue,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) {
-                      return HomePage();
-                    },
-                  ));
+              BlocConsumer<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthLoggedInState) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return HomePage();
+                      },
+                    ));
+                  } else if (state is AuthErrorState) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.error),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
                 },
-                child: const Text('Verify'),
+                builder: (context, state) {
+                  if (state is AuthLoadingState) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return CupertinoButton(
+                    color: Colors.blue,
+                    onPressed: () {
+                      BlocProvider.of<AuthCubit>(context)
+                          .verifyOPT(verificationController.text);
+                    },
+                    child: const Text('Verify'),
+                  );
+                },
               )
             ],
           ),

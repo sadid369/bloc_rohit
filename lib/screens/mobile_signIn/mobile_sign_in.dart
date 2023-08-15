@@ -1,6 +1,9 @@
+import 'package:bloc_rohit/screens/mobile_signIn/cubit/auth_cubit.dart';
+import 'package:bloc_rohit/screens/mobile_signIn/cubit/auth_state.dart';
 import 'package:bloc_rohit/screens/mobile_signIn/number_verification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MobileSignIn extends StatefulWidget {
   const MobileSignIn({Key? key}) : super(key: key);
@@ -16,9 +19,9 @@ class _MobileSignInState extends State<MobileSignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Sign In with Email"),
+          title: const Text("Sign In with Phone"),
         ),
-        body: Padding(
+        body: Container(
           padding: EdgeInsets.all(10),
           child: ListView(
             physics: BouncingScrollPhysics(
@@ -39,16 +42,38 @@ class _MobileSignInState extends State<MobileSignIn> {
               const SizedBox(
                 height: 20,
               ),
-              CupertinoButton(
-                child: Text('Sign In'),
-                color: Colors.blue,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) {
-                      return const NumberVerification();
-                    },
-                  ));
-                },
+              Container(
+                child: BlocConsumer<AuthCubit, AuthState>(
+                  listener: (_, state) {
+                    if (state is AuthCodeSentState) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) {
+                          return NumberVerification();
+                        },
+                      ));
+                    }
+                  },
+                  builder: (_, state) {
+                    if (state is AuthLoadingState) {
+                      return Center(
+                        child: const CircularProgressIndicator(),
+                      );
+                    }
+                    return SizedBox(
+                      child: CupertinoButton(
+                        color: Colors.blue,
+                        onPressed: () {
+                          String phoneNumber =
+                              "+88" + phoneNumberController.text;
+                          // context.read<AuthCubit>().sentOPT(phoneNumber);
+                          BlocProvider.of<AuthCubit>(context)
+                              .sentOPT(phoneNumber);
+                        },
+                        child: Text('Sign In'),
+                      ),
+                    );
+                  },
+                ),
               )
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:bloc_rohit/firebase_options.dart';
 import 'package:bloc_rohit/home_page.dart';
 import 'package:bloc_rohit/routes.dart';
+import 'package:bloc_rohit/screens/mobile_signIn/cubit/auth_cubit.dart';
+import 'package:bloc_rohit/screens/mobile_signIn/cubit/auth_state.dart';
 import 'package:bloc_rohit/screens/mobile_signIn/mobile_sign_in.dart';
 import 'package:bloc_rohit/screens/sign_in/bloc/sign_in_bloc.dart';
 import 'package:bloc_rohit/welcome/welcome.dart';
@@ -12,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(BlocProvider(
-    create: (context) => SignInBloc(),
+    create: (context) => AuthCubit(),
     child: MyApp(),
   ));
 }
@@ -30,6 +32,19 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         onGenerateRoute: (settings) => generateRoute(settings),
-        home: const MobileSignIn());
+        home: BlocBuilder<AuthCubit, AuthState>(
+          buildWhen: (previousSate, currentStaet) {
+            return previousSate is AuthInitialState;
+          },
+          builder: (context, state) {
+            if (state is AuthLoggedInState) {
+              return HomePage();
+            } else if (state is AuthLoggedOutState) {
+              return MobileSignIn();
+            } else {
+              return Scaffold();
+            }
+          },
+        ));
   }
 }
